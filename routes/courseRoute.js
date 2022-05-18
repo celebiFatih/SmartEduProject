@@ -10,4 +10,7 @@ router.route('/').post(courseController.createCourse); //http://localhost:3000/c
 // Kursları sıralamak için gerekli olan route
 router.route('/').get(courseController.getAllCourses);
 
+// tekil kurs yonlendirmesi
+router.route('/:slug').get(courseController.getCourse);
+
 module.exports = router;
