@@ -1,6 +1,15 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const pageRoute = require('./routes/pageRoute');
+const courseRoute = require('./routes/courseRoute');
 
 const app = express();
+
+//CONNECT DB
+mongoose.connect('mongodb://localhost/smartedu-db', {}).then(() => {
+  //promise nesnesini yakalıyoruz.
+  console.log('DB Connected Succesful');
+});
 
 //TEMPLATE ENGINE
 app.set('view engine', 'ejs');
@@ -9,16 +18,12 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 //ROUTES
-app.get('/', (req, res) => {
-  res.status(200).render('index',{
-      page_name: "index" //template engine page_name isimli değişken gonderiyoruz. sayfa aktif olanı gosterilmesinde kullanamk için
-  });
-});
-app.get('/about', (req, res) => {
-  res.status(200).render('about',{
-    page_name: "about"
-});
-});
+app.use('/', pageRoute); // '/' isteği geldiği zaman pageRoute' u kullan. tüm gelen istekler pageRoute'a yönlendiriliyor
+// burada artık sadece index sayfasını route ediyoruz ve pageRoute sayfasına yonlendiriyoruz.
+//artık diğer sayfaların yonlendirilmesi de pageRoute uzerinden devam edilecek.
+// yapılacak olan yonlendirmeleri buyuk projelerde tek bir dosyada koydugumuzda işlerin karışmaması için
+// kullanıcıları kursların yonlendirmelerini de ayrı bir dosyada gerçekleştireceğiz
+app.use('/courses', courseRoute); // '/courses' isteği geldiği zaman courseRoute' u kullan.
 
 const port = 3000;
 app.listen(port, () => {
