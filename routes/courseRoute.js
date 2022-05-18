@@ -4,7 +4,10 @@ const courseController = require('../controllers/courseController');
 
 const router = express.Router();
 
-// yeni bir kurs olusturmak için forum doldurdugumuz için yapmamız gereken post request
-router.route('/').post(courseController.createCourse) //http://localhost:3000/courses -->app.js den gelen
+// Create Course--yeni bir kurs olusturmak için forum doldurdugumuz için yapmamız gereken post request
+router.route('/').post(courseController.createCourse); //http://localhost:3000/courses -->app.js den gelen
+
+// Kursları sıralamak için gerekli olan route
+router.route('/').get(courseController.getAllCourses);
 
 module.exports = router;

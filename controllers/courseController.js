@@ -3,8 +3,7 @@ const Course = require('../models/Course'); // kurs olusturmak için model dosya
 
 // Create Course
 exports.createCourse = async (req, res) => {
-  //kurs olusturma sayfası henuz hazır olmadığı için burada once onun simulasyonunu yapacağız
-  
+  //kurs olusturma sayfası henuz hazır olmadığı için burada once onun simulasyonunu yapacağız  
   // aldığımız cevap. henuz template'e render etmiyoruz. onun yerine json dosyası olarak yazdıyoruz  
   try {
     const course = await Course.create(req.body); // req.body kursu doldurmak için gerekli olan formdan gelecek bilgiler
@@ -22,3 +21,22 @@ exports.createCourse = async (req, res) => {
 /* bu işlemi soyle dusunmeliyiz: biz backend'de calısıypruz ve frontend henuz hazır değil. ancak backendde yaparkende
     bizde bir şekilde yeni bir kurs olusturma isteği gelmiş giib davranmamız lazım. bunun için postman yazılımından faydalanacağız.
 */
+
+// Kursları Sıralama
+exports.getAllCourses = async (req, res) => {
+ 
+  try {
+    const courses = await Course.find(); // tüm kursları alsın
+    
+    // cevap
+    res.status(200).render('courses',{ // '/courses' i render et
+      courses,
+      page_name: 'courses' //courses linkinişn aktif olmasını sağlayacak
+    }) // yeni olusturma için 201 kodu
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error,
+    });
+  }
+};
