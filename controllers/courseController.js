@@ -8,10 +8,7 @@ exports.createCourse = async (req, res) => {
   // aldığımız cevap. henuz template'e render etmiyoruz. onun yerine json dosyası olarak yazdıyoruz
   try {
     const course = await Course.create(req.body); // req.body kursu doldurmak için gerekli olan formdan gelecek bilgiler
-    res.status(201).json({
-      status: 'success',
-      course,
-    }); // yeni olusturma için 201 kodu
+    res.status(201).redirect('/courses'); // yeni olusturma için 201 kodu
   } catch (error) {
     res.status(400).json({
       status: 'fail',
@@ -34,7 +31,7 @@ exports.getAllCourses = async (req, res) => {
       filter = { category: category._id };
     }
 
-    const courses = await Course.find(filter); // tüm kursları kategorisine göre alsın
+    const courses = await Course.find(filter).sort('-createdAt'); // tüm kursları kategorisine göre alsın
     const categories = await Category.find(); // tüm kategorileri alsın
 
     // cevap

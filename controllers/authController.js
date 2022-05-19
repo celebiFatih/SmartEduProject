@@ -1,7 +1,8 @@
 //Authentication İşlemleri burada yapılacak
 
-const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const User = require('../models/User');
+const Category = require('../models/Category');
 
 // Create User
 exports.createUser = async (req, res) => {
@@ -51,8 +52,10 @@ exports.logoutUser = (req, res) => {
 // Dashboard template'tini render et
 exports.getDashboardPage = async (req, res) => { 
   const user = await User.findOne({_id: req.session.userID}) // giriş yapan kullanıcıyı yakalasın
+  const categories = await Category.find(); // tum kategorileri alıp dashboard'a gonderiyoruz
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
-    user // kullanıcı bilgilerini dashboard template'ine gondersin
+    user, // kullanıcı bilgilerini dashboard template'ine gondersin
+    categories
   });
 };
