@@ -31,7 +31,7 @@ exports.loginUser =  (req, res) => {
             // User Session
             req.session.userID = user._id; // hangi kullnıcı giriş yaptıgını belirlemek için her kullanıcıya ozel olan id bilgisini kullanarak session da bir userID olusturyoruz
             
-            res.status(200).redirect('/');
+            res.status(200).redirect('/users/dashboard');
           }
         }); // body'den gelen passw ile vt'nıdaki user.passw karşılaştır
       }
@@ -46,7 +46,16 @@ exports.loginUser =  (req, res) => {
 
 //Çıkış İşlemi
 exports.logoutUser = (req, res) => {
-  req.session.destroy(()=>{
+  req.session.destroy(()=>{ // destrol metodu oturumu sonlandırır
     res.redirect('/');
   })
 }
+
+// Dashboard template'tini render et
+exports.getDashboardPage = async (req, res) => { 
+  const user = await User.findOne({_id: req.session.userID}) // giriş yapan kullanıcıyı yakalasın
+  res.status(200).render('dashboard', {
+    page_name: 'dashboard',
+    user // kullanıcı bilgilerini dashboard template'ine gondersin
+  });
+};
