@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
 const categoryRoute = require('./routes/categoryRoute');
+const userRoute = require('./routes/userRoute');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/', pageRoute); // '/' isteği geldiği zaman pageRoute' u kullan. tüm
 // kullanıcıları kursların yonlendirmelerini de ayrı bir dosyada gerçekleştireceğiz
 app.use('/courses', courseRoute); // '/courses' isteği geldiği zaman courseRoute' u kullan.
 app.use('/categories', categoryRoute); // '/categories' isteği geldiği zaman categoryRoute' u kullan.
+app.use('/users', userRoute); // '/categories' isteği geldiği zaman categoryRoute' u kullan.
 
 const port = 3000;
 app.listen(port, () => {
