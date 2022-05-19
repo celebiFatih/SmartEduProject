@@ -2,12 +2,18 @@
 const Course = require('../models/Course'); // kurs olusturmak için model dosyamızı çağırıyoruz
 const Category = require('../models/Category'); // courses sayfasına aynı zamanda kategorileri de gondememiz gerek
 
-// Create Course
+// CREATE  COURSE
 exports.createCourse = async (req, res) => {
   //kurs olusturma sayfası henuz hazır olmadığı için burada once onun simulasyonunu yapacağız
   // aldığımız cevap. henuz template'e render etmiyoruz. onun yerine json dosyası olarak yazdıyoruz
   try {
-    const course = await Course.create(req.body); // req.body kursu doldurmak için gerekli olan formdan gelecek bilgiler
+    const course = await Course.create({
+      name: req.body.name,
+      description: req.body.description,
+      category: req.body.category,
+      user: req.session.userID
+    }); // gelen kullanıcı bilgilerinden kursu olusturanın hangi öğretmen oldugunu yakalamak için sessiondaki userID den alıyoruz
+
     res.status(201).redirect('/courses'); // yeni olusturma için 201 kodu
   } catch (error) {
     res.status(400).json({
@@ -52,7 +58,7 @@ exports.getAllCourses = async (req, res) => {
 // Tekil Kursu Getirme
 exports.getCourse = async (req, res) => {
   try {
-    const course = await Course.findOne({ slug: req.params.slug }); //slug'ına göre bul
+    const course = await Course.findOne({ slug: req.params.slug }).populate('user'); //slug'ına göre bul // user'ı populate ederek kursun user ilişkisinden faydalanarak single course sayfasında user bilgisine erişebiliriz
     // cevap
     res.status(200).render('course', {
       // course template' i içinde render et

@@ -25,6 +25,10 @@ const CourseSchema = new Schema({
   category: { // kurslarla kategoriler arasındaki ilişkiyi tanımlıyoruz. Kursları olusturken aynı zamanda kategorilerini de secebileceğiz
     type: mongoose.Schema.Types.ObjectId, // bu kategorileri kendimiz belirlemek yerine var olan kategori verilenden cekiyoruz.
     ref: 'Category' // referans vermek istedeğimiz modelin ismini tanımlıyoruz
+  },
+  user: { // kursu olusturan aöğretmen bilgilerini alabileceğiz
+    type: mongoose.Schema.Types.ObjectId, // kurslarla kullanıcılar arasındaki ilişkiyi tanımlıyoruz
+    ref: 'User'
   }
 });
 
