@@ -17,6 +17,11 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    enum: ["student", "teacher", "admin"], // string veritipinin alacağı değerleri tanımladık. kullanıcı öğrenci, öğretmen ya da admin olabilir
+    default: "student" // varsayılan oalrak öğrenci olacak
+  }
 });
 
 // Kullanıcıdan alınan şifreyi vt' ye kaydedilmedin(belge olusturulmadan) once hash olarak kaydediyoruz
