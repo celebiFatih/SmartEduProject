@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const session = require('express-session')
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
 const categoryRoute = require('./routes/categoryRoute');
@@ -29,6 +30,7 @@ app.use(session({
   secret: 'my_keyboard_cat', //  oturum tanımlama bilgisini imzalamak için kullanılan sırdır.
   resave: false, // İstek sırasında oturum hiç değiştirilmemiş olsa bile, oturumu oturum deposuna geri kaydedilmeye zorlar.
   saveUninitialized: true, //bir oturumu kaydedilmeye zorlar
+  store: MongoStore.create({ mongoUrl: 'mongodb://localhost/smartedu-db' }),
 }));
 
 //ROUTES

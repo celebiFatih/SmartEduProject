@@ -43,3 +43,10 @@ exports.loginUser =  (req, res) => {
     });
   }
 };
+
+//Çıkış İşlemi
+exports.logoutUser = (req, res) => {
+  req.session.destroy(()=>{
+    res.redirect('/');
+  })
+}
