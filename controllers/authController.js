@@ -29,7 +29,9 @@ exports.loginUser =  (req, res) => {
         bcrypt.compare(password, user.password, (err, same) => {// body'den gelen passw ile vt'da ki passw compare et
           if(same){ // aynıysa 
             // User Session
-            res.status(200).send('YOU ARE LOGGED IN'); // kullanıcı doğrulandıgında açılacak olan sayfa henuz mevcur olmadıgından şimdilik bu sekilde bir mesaj tanımladık
+            req.session.userID = user._id; // hangi kullnıcı giriş yaptıgını belirlemek için her kullanıcıya ozel olan id bilgisini kullanarak session da bir userID olusturyoruz
+            
+            res.status(200).redirect('/');
           }
         }); // body'den gelen passw ile vt'nıdaki user.passw karşılaştır
       }

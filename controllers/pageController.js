@@ -1,5 +1,6 @@
 // '/index' template'ini render et'
 exports.getIndexPage = (req, res) => { 
+  console.log(req.session.userID); // her index sayfasına geldiğimizde hangi kullanıcı sessionda ise onu yazdırsın
   res.status(200).render('index', {
     page_name: 'index', //template engine page_name isimli değişken gonderiyoruz. sayfa aktif olanı gosterilmesinde kullanamk için
   });
