@@ -9,5 +9,7 @@ router.route('/').get(pageController.getIndexPage) // '/' sayfasına get isteği
 router.route('/about').get(pageController.getAboutPage)
 router.route('/register').get(redirectMiddleware, pageController.getRegisterPage) // bu herhangi bir kullanıcının ulaşabileceği bir sayfa oldugu için bu sayfada ve pageController sayfasında gerçekleştirdik. kayıt işlemi gerçekleştikten sonraki işlemleri ayrı bir controller da yapacağız
 router.route('/login').get(redirectMiddleware, pageController.getLoginPage); // login sayfasını getir
+router.route('/contact').get(pageController.getContactPage);
+router.route('/contact').post(pageController.sendEmail); // formdaki bilgileri gonderirken post
 
 module.exports = router;
