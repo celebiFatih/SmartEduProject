@@ -9,10 +9,26 @@ exports.createCategory = async (req, res) => {
   // aldığımız cevap. henuz template'e render etmiyoruz. onun yerine json dosyası olarak yazdıyoruz
   try {
     const category = await Category.create(req.body); // req.body kursu doldurmak için gerekli olan formdan gelecek bilgiler
-    res.status(201).json({
-      status: 'success',
-      category,
-    }); // yeni olusturma için 201 kodu
+    res.status(201).redirect('/users/dashboard')
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error,
+    });
+  }
+};
+
+// DELETE USER
+exports.deleteCategory = async (req, res) => {
+  try {
+    // const user = 
+    await Category.findByIdAndRemove(req.params.id);
+    
+    // req.flash("error", `${user.name} user has been removed successfully`);
+    
+    // cevap
+    res.status(200).redirect('/users/dashboard');
+
   } catch (error) {
     res.status(400).json({
       status: 'fail',

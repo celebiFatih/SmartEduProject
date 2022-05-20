@@ -1,10 +1,21 @@
 const nodemailer = require("nodemailer");
+const Course = require('../models/Course')
+const User = require('../models/User')
 
 // '/index' template'ini render et'
-exports.getIndexPage = (req, res) => { 
-  console.log(req.session.userID); // her index sayfasına geldiğimizde hangi kullanıcı sessionda ise onu yazdırsın
+exports.getIndexPage = async (req, res) => { 
+  
+  const courses = await Course.find().sort('-createdAt').limit(2) // index sayfasında son eklenen iki kursu gostereceğiz
+  const totalCourses = await Course.find().countDocuments(); // toplam kurs sayısı
+  const totalStudents = await User.countDocuments({role: 'student'}); // toplam öğrenci sayısı
+  const totalTeachers = await User.countDocuments({role: 'teacher'}); // toplam öğretmen sayısı
+  
   res.status(200).render('index', {
     page_name: 'index', //template engine page_name isimli değişken gonderiyoruz. sayfa aktif olanı gosterilmesinde kullanamk için
+    courses,
+    totalCourses,
+    totalStudents,
+    totalTeachers
   });
 };
 
