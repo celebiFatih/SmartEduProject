@@ -1,6 +1,7 @@
 //Authentication İşlemleri burada yapılacak
 
 const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator');
 const User = require('../models/User');
 const Category = require('../models/Category');
 const Course = require('../models/Course');
@@ -9,34 +10,48 @@ const Course = require('../models/Course');
 exports.createUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
+
     res.status(201).redirect('/login');
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      error,
-    });
+    const errors = validationResult(req);
+    // console.log(errors);
+    // console.log(errors.array()[0].msg); // routt'ta olusturulan hata mesajıonı yakaladık
+    for (let i = 0; i < errors.array().length; i++) {
+      req.flash('error', `${errors.array()[i].msg}`);
+    }
+
+    res.status(400).redirect('/register');
   }
 };
 
 // Giriş Kontrolü
-exports.loginUser = (req, res) => {
+exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body; // mail ve passw body'den gelen mail ve passw'e eşit olacak
-
-    User.findOne({ email }, (err, user) => {
+    // Hem await hem callback kullandığımızda mongo yeni sürümünde hata veriyor. await ile userı aldıktan sonra diğer işlemleri yapabiliriz
+    const user = await User.findOne({ email });
       // vt'nındaki maili bodyden gelen mail olanı bulacak. callback ile user yoksa err varsa user'ı donderecek
       if (user) {
         // kullanıcı varsa şifre kontrolu yap
         bcrypt.compare(password, user.password, (err, same) => {
           // body'den gelen passw ile vt'da ki passw compare et
 
-          // User Session
-          req.session.userID = user._id; // hangi kullnıcı giriş yaptıgını belirlemek için her kullanıcıya ozel olan id bilgisini kullanarak session da bir userID olusturyoruz
+          if (same) {
+            //passwordler birbiri ile uyusuyorsa
 
-          res.status(200).redirect('/users/dashboard');
+            // User Session
+            req.session.userID = user._id; // hangi kullnıcı giriş yaptıgını belirlemek için her kullanıcıya ozel olan id bilgisini kullanarak session da bir userID olusturyoruz
+            res.status(200).redirect('/users/dashboard');
+          } else {
+            req.flash('error', 'Your password is not correct');
+            res.status(400).redirect('/login');
+          }
         }); // body'den gelen passw ile vt'nıdaki user.passw karşılaştır
+      }else{
+          req.flash('error', 'User is not exist');
+            res.status(400).redirect('/login');
       }
-    });
+    
   } catch (error) {
     res.status(400).json({
       status: 'fail',

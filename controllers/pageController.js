@@ -79,7 +79,6 @@ exports.sendEmail = async (req, res) => {
   } catch (err) {
     // req.flash("error", `Something happend! ${err}`); // hatalı oldugunda su mesajı yazdır.
     req.flash("error", `Something happened!`);
-    res.status(200).redirect('contact')
-    
+    res.status(200).redirect('contact')    
   }
 };
