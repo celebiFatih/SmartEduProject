@@ -15,7 +15,21 @@
     <div id="overviews" class="section wb">
         <div class="container">
             <div class="row"> 
+				
                 <div class="col-lg-9 blog-post-single">
+						<!-- flash mesajını ekliyoruz -->
+				<% if (flashMessages) { %> <!-- önce var mı yok mu diye kontrol ediyoruz -->
+					<% if (flashMessages.success) { %> <!-- başarılı mesaj varsa -->
+						<div class="alert alert-success">
+							<%= flashMessages.success %> 
+						</div>
+
+					<% } else if (flashMessages.error) { %> 
+						<div class="alert alert-danger">
+							<%= flashMessages.error %> 
+						</div>
+					<% } %> 
+				<% } %> 
 				<div class="row"> 
 
 					<!-- gonderdiğimiz kurslar uzerinden bir for dongusu yazıyoruz -->

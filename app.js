@@ -2,11 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const flash = require('connect-flash');
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
 const categoryRoute = require('./routes/categoryRoute');
 const userRoute = require('./routes/userRoute');
-const req = require('express/lib/request');
 
 const app = express();
 
@@ -32,6 +32,11 @@ app.use(session({
   saveUninitialized: true, //bir oturumu kaydedilmeye zorlar
   store: MongoStore.create({ mongoUrl: 'mongodb://localhost/smartedu-db' }),
 }));
+app.use(flash());
+app.use((req,res,next) => {
+  res.locals.flashMessages = req.flash();
+  next();
+});
 
 //ROUTES
 app.use('*', (req, res, next) => {
@@ -46,6 +51,7 @@ app.use('/', pageRoute); // '/' isteği geldiği zaman pageRoute' u kullan. tüm
 app.use('/courses', courseRoute); // '/courses' isteği geldiği zaman courseRoute' u kullan.
 app.use('/categories', categoryRoute); // '/categories' isteği geldiği zaman categoryRoute' u kullan.
 app.use('/users', userRoute); // '/users' isteği geldiği zaman userRoute' u kullan.
+
 
 const port = 3000;
 app.listen(port, () => {

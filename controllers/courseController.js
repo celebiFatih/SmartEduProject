@@ -15,12 +15,11 @@ exports.createCourse = async (req, res) => {
       user: req.session.userID
     }); // gelen kullanıcı bilgilerinden kursu olusturanın hangi öğretmen oldugunu yakalamak için sessiondaki userID den alıyoruz
 
+    req.flash("success", `${course.name} course has been created successfully`);//başarılı oldugunda flash mesajı
     res.status(201).redirect('/courses'); // yeni olusturma için 201 kodu
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      error,
-    });
+    req.flash("error", `Something happened!`);//başarılı oldugunda flash mesajı
+    res.status(400).redirect('/courses');
   }
 };
 /* bu işlemi soyle dusunmeliyiz: biz backend'de calısıypruz ve frontend henuz hazır değil. ancak backendde yaparkende
