@@ -30,15 +30,34 @@ exports.createCourse = async (req, res) => {
 // Kursları Sıralama
 exports.getAllCourses = async (req, res) => {
   try {
+
     // kursları kategorilerine gore filtreleyip sıralama
     const categorySlug = req.query.categories; //parametreden gelen kategoriyi bulduk. //http://localhost:3000/courses?categories=programming
+    const query = req.query.search; // search: courses.ejs -> form input name=search
     const category = await Category.findOne({ slug: categorySlug }); // await olmasını beklemeden aşağı inmesin kod
+    
     let filter = {};
+
     if (categorySlug) {
       filter = { category: category._id };
     }
 
-    const courses = await Course.find(filter).sort('-createdAt'); // tüm kursları kategorisine göre alsın
+    if (query) { // searh alanına bir şey yazılmıssa
+      filter = {name: query} // örn: search alanına java yazdığında query java olacak burada da ilgili kursun isminde arayacak
+    }
+
+    if(!query && !categorySlug){
+      filter.name = "";
+      filter.category = null;
+    }
+
+    const courses = await Course.find({
+      $or:[
+        {name: {$regex: '.*'+ filter.name + '.*', $options: 'i'}},
+        {category: filter.category}
+      ]
+    }).sort('-createdAt').populate('user'); // tüm kursları kategorisine göre alsın // öğretmen isimlerini coures.ejs'de çekebilmek için populate ettik
+    
     const categories = await Category.find(); // tüm kategorileri alsın
 
     // cevap
@@ -62,13 +81,15 @@ exports.getCourse = async (req, res) => {
     const user = await User.findById(req.session.userID); // giriş yapan kullanıcıyı yakalıyoruz
     const course = await Course.findOne({ slug: req.params.slug }).populate('user'); //slug'ına göre bul // user'ı populate ederek kursun user ilişkisinden faydalanarak single course sayfasında user bilgisine erişebiliriz
     //bir modelden referans olan diğer modele populate ederek erişebiliyoruz
+    const categories = await Category.find();
     
     // cevap
     res.status(200).render('course', {
       // course template' i içinde render et
       course, // kurs bilgilerini gonderdik
       page_name: 'courses',
-      user // kullanıcı bilgilerini gonderdik
+      user, // kullanıcı bilgilerini gonderdik
+      categories
     });
   } catch (error) {
     res.status(400).json({

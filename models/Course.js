@@ -28,7 +28,7 @@ const CourseSchema = new Schema({
   },
   user: { // kursu olusturan aöğretmen bilgilerini alabileceğiz
     type: mongoose.Schema.Types.ObjectId, // kurslarla kullanıcılar arasındaki ilişkiyi tanımlıyoruz
-    ref: 'User'
+    ref: 'User' // objectId
   }
 });
 
