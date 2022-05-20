@@ -19,20 +19,27 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["student", "teacher", "admin"], // string veritipinin alacağı değerleri tanımladık. kullanıcı öğrenci, öğretmen ya da admin olabilir
-    default: "student" // varsayılan oalrak öğrenci olacak
+    enum: ['student', 'teacher', 'admin'], // string veritipinin alacağı değerleri tanımladık. kullanıcı öğrenci, öğretmen ya da admin olabilir
+    default: 'student', // varsayılan oalrak öğrenci olacak
   },
-  courses: [{ // kullanıcının almıs oldugu kurslar için Course modeli ile ilişki
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course'
-  }]
+  courses: [
+    {
+      // kullanıcının almıs oldugu kurslar için Course modeli ile ilişki
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
+    },
+  ],
 });
 
 // Kullanıcıdan alınan şifreyi vt' ye kaydedilmeden(belge olusturulmadan) once hash olarak kaydediyoruz
 UserSchema.pre('save', function (next) {
-  if(!this.isModified('password')) return next(); // öğrencinin kursa enroll ettiği sayfadan bir tetikleme geldiği zaman yeniden parola olusturmasın diye
   const user = this; // this hangi kullanıcı giriş işlemi yapıyorsa o kullnıcı
-  bcrypt.hash(user.password, 10, (error, hash) => { // 10 şifrelemenin duzeyini temsil ediyor
+
+  if (!user.isModified('password')) return next(); // öğrencinin kursa enroll ettiği sayfadan bir tetikleme geldiği zaman yeniden parola olusturmasın diye
+
+  bcrypt.hash(user.password, 10, (error, hash) => {
+    // 10 şifrelemenin duzeyini temsil ediyor
+    if (err) return next(err);
     user.password = hash;
     next();
   });

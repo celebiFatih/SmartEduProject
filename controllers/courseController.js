@@ -129,3 +129,19 @@ exports.releaseCourse = async (req, res) => {
     });
   }
 };
+
+// DELETE COURSE
+exports.deleteCourse = async (req, res) => {
+  try {
+    const course = await Course.findOneAndRemove({slug:req.params.slug}); // kursun slug parametresinin requestten gelen parametreye esşit oldugu zaman sil
+    req.flash("error", `${course.name} course has been removed successfully`);
+    
+    // cevap
+    res.status(200).redirect('/users/dashboard');
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error,
+    });
+  }
+};

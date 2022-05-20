@@ -14,10 +14,10 @@ router.route('/').get(courseController.getAllCourses);
 
 // tekil kurs yonlendirmesi
 router.route('/:slug').get(courseController.getCourse);
+router.route('/:slug').delete(courseController.deleteCourse);
 
 // user'a eklenecek kursu yonlendirme
 router.route('/enroll').post(courseController.enrollCourse);
 router.route('/release').post(courseController.releaseCourse);
-
 
 module.exports = router;

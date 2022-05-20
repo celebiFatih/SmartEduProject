@@ -35,7 +35,7 @@
                 </div><!-- end col -->
             </div><!-- end row -->
 			<div class="row mt-5"> 
-				 <% for(let i =0; i<user.courses.length; i++) { %> <!-- ilgili user'ın kurslarına bakıyoruz -->
+				<% for(let i =0; i<user.courses.length; i++) { %> <!-- ilgili user'ın kurslarına bakıyoruz -->
 					<div class="col-lg-6 col-md-6 col-12">
 						<div class="course-item mb-5">
 							<div class="image-blog">
@@ -52,6 +52,7 @@
 										<button class="btn btn-lg btn-danger text-white"><span>RELEASE</span></button>
 									</form>
 								</div>
+								
 							</div>
 						</div>
 					</div><!-- end col -->
@@ -74,6 +75,19 @@
 		<div id="overviews" class="section wb">
 			<div class="container">
 				<div class="row"> 
+							<!-- flash mesajını ekliyoruz -->
+				<% if (flashMessages) { %> <!-- önce var mı yok mu diye kontrol ediyoruz -->
+					<% if (flashMessages.success) { %> <!-- başarılı mesaj varsa -->
+						<div class="alert alert-success">
+							<%= flashMessages.success %> 
+						</div>
+
+					<% } else if (flashMessages.error) { %> 
+						<div class="alert alert-danger">
+							<%= flashMessages.error %> 
+						</div>
+					<% } %> 
+				<% } %> 
 
 					<!-- Modal Button -->
 					<div class="col-lg-12 text-center">
@@ -110,6 +124,14 @@
 								</div>
 								<div class="course-desc">
 									<p><%= courses[i].description %></p>
+								</div>
+								<div class="clearfix">
+									<ul style="list-style-type: none;">
+										<li style="float: left;"><button class="btn btn-primary rounded-o text-white"><span>UPDATE</span></button></li>
+										<li><a href="/courses/<%= courses[i].slug %>?_method=DELETE" style="float: right;"
+											onclick="return confirm('ARE YOU SURE?')"
+											class="btn btn-danger rounded-o text-white"><span>DELETE</span></a></li>
+									</ul>
 								</div>
 							</div>
 						</div>
