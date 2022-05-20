@@ -37,7 +37,7 @@ UserSchema.pre('save', function (next) {
 
   if (!user.isModified('password')) return next(); // öğrencinin kursa enroll ettiği sayfadan bir tetikleme geldiği zaman yeniden parola olusturmasın diye
 
-  bcrypt.hash(user.password, 10, (error, hash) => {
+  bcrypt.hash(user.password, 10, (err, hash) => {
     // 10 şifrelemenin duzeyini temsil ediyor
     if (err) return next(err);
     user.password = hash;

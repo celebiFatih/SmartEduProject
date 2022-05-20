@@ -76,11 +76,33 @@ exports.getDashboardPage = async (req, res) => {
   const categories = await Category.find(); // tum kategorileri alıp dashboard'a gonderiyoruz
   // dashboard'a kullanıcı tarafından olusturulan  kursları gonderiyoruz
   const courses = await Course.find({ user: req.session.userID }); // kursların içindeki user id ile sessiondaki userid'si ortusenler. yani o an giriş yapmıs olan kullanıclar tarafıondan olusturulan kurslar /rolu öğretmen olan kullnılar
-
+  const users = await User.find();
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     user, // kullanıcı bilgilerini dashboard template'ine gondersin
     categories,
     courses,
+    users
   });
+};
+
+
+// DELETE USER
+exports.deleteUser = async (req, res) => {
+  try {
+    // const user = 
+    await User.findByIdAndRemove(req.params.id);
+    await Course.deleteMany({user: req.params.id}) // kaldırılan kullanıcıya ait olan kursları da kaldır
+    
+    // req.flash("error", `${user.name} user has been removed successfully`);
+    
+    // cevap
+    res.status(200).redirect('/users/dashboard');
+
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error,
+    });
+  }
 };

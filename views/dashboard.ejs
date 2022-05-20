@@ -8,63 +8,64 @@
 <!-- user giriş yapmamışsa dashboard içeriği goorunmesin -->
 <% if(user) { %> 
 
+	<!-- STUDENT ise gosterilecek olan içerik -->	
 	<% if(user.role === 'student') { %> 
-	<!-- öğrenci ise gosterilecek olan içerik -->
-	<div class="all-title-box">
-		<div class="container text-center">
-			<h1><%= user.name %> <span class="m_1">STUDENT</span></h1>
+		<!-- öğrenci ise gosterilecek olan içerik -->
+		<div class="all-title-box">
+			<div class="container text-center">
+				<h1><%= user.name %> <span class="m_1">STUDENT</span></h1>
+			</div>
 		</div>
-	</div>
-    <div id="overviews" class="section wb">
-        <div class="container">
-            <div class="row"> 
-                <div class="col-lg-12 blog-post-single">					
-					<div class="blog-author">
-						<div class="author-bio">
-							<h3 class="author_name"><a href="#"><%= user.name %> </a></h3>
-							<h5><%= user.role %>  at <a href="#">SmartEDU</a></h5>
-							<p class="author_det">
-								Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt  ut aut reiciendise voluptat maiores alias consequaturs aut perferendis doloribus omnis saperet docendi nec, eos ea alii molestiae aliquand.
-							</p>
-						</div>
-						<div class="author-desc">
-							<img src="/images/author.jpg" alt="about author">
-						</div>
-					</div>
-					
-                </div><!-- end col -->
-            </div><!-- end row -->
-			<div class="row mt-5"> 
-				<% for(let i =0; i<user.courses.length; i++) { %> <!-- ilgili user'ın kurslarına bakıyoruz -->
-					<div class="col-lg-6 col-md-6 col-12">
-						<div class="course-item mb-5">
-							<div class="image-blog">
-								<img src="/images/blog_1.jpg" alt="" class="img-fluid">
+		<div id="overviews" class="section wb">
+			<div class="container">
+				<div class="row"> 
+					<div class="col-lg-12 blog-post-single">					
+						<div class="blog-author">
+							<div class="author-bio">
+								<h3 class="author_name"><a href="#"><%= user.name %> </a></h3>
+								<h5><%= user.role %>  at <a href="#">SmartEDU</a></h5>
+								<p class="author_det">
+									Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt  ut aut reiciendise voluptat maiores alias consequaturs aut perferendis doloribus omnis saperet docendi nec, eos ea alii molestiae aliquand.
+								</p>
 							</div>
-							<div class="course-br">
-								<div class="course-title">
-									<h2><a href="/courses/<%= user.courses[i].slug %>" title=""><%= user.courses[i].name %></a></h2>
-								</div>
-								<div class="course-desc">
-									<p><%= user.courses[i].description %></p>
-									<form action="/courses/release" method="post">
-										<input type="hidden" name="course_id" value="<%= user.courses[i]._id %>"> <!-- hangi kursa kayıt olduğunu yakalamak için -->
-										<button class="btn btn-lg btn-danger text-white"><span>RELEASE</span></button>
-									</form>
-								</div>
-								
+							<div class="author-desc">
+								<img src="/images/author.jpg" alt="about author">
 							</div>
 						</div>
-					</div><!-- end col -->
-				<% } %> 
-
 						
-            </div><!-- end row -->
-        </div><!-- end container -->
-    </div><!-- end section -->
+					</div><!-- end col -->
+				</div><!-- end row -->
+				<div class="row mt-5"> 
+					<% for(let i =0; i<user.courses.length; i++) { %> <!-- ilgili user'ın kurslarına bakıyoruz -->
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="course-item mb-5">
+								<div class="image-blog">
+									<img src="/images/blog_1.jpg" alt="" class="img-fluid">
+								</div>
+								<div class="course-br">
+									<div class="course-title">
+										<h2><a href="/courses/<%= user.courses[i].slug %>" title=""><%= user.courses[i].name %></a></h2>
+									</div>
+									<div class="course-desc">
+										<p><%= user.courses[i].description %></p>
+										<form action="/courses/release" method="post">
+											<input type="hidden" name="course_id" value="<%= user.courses[i]._id %>"> <!-- hangi kursa kayıt olduğunu yakalamak için -->
+											<button class="btn btn-lg btn-danger text-white"><span>RELEASE</span></button>
+										</form>
+									</div>
+									
+								</div>
+							</div>
+						</div><!-- end col -->
+					<% } %> 
+
+							
+				</div><!-- end row -->
+			</div><!-- end container -->
+		</div><!-- end section -->
 	<% } %>
 
-	<!-- öğretmen ise gosterilecek olan içerik -->	
+	<!-- TEACHER ise gosterilecek olan içerik -->	
 	<% if(user.role === 'teacher') { %> 
 	
 		<div class="all-title-box">
@@ -238,9 +239,67 @@
 				</div>
 			</div>	
 		</div>
-	<% } %> 
+	<% } %>
+	
+	<!-- ADMİN ise gosterilecek olan içerik -->
+	<% if(user.role === 'admin') { %> 
+		<!-- öğrenci ise gosterilecek olan içerik -->
+		<div class="all-title-box">
+			<div class="container text-center">
+				<h1><%= user.name %> <span class="m_1">ADMIN</span></h1>
+			</div>
+		</div>
+		<div id="overviews" class="section wb">
+			<div class="container">
+				<div class="row"> 
+					<div class="col-lg-12 blog-post-single">					
+						<div class="blog-author">
+							<div class="author-bio">
+								<h3 class="author_name"><a href="#"><%= user.name %> </a></h3>
+								<h5><%= user.role %>  at <a href="#">SmartEDU</a></h5>
+								<p class="author_det">
+									Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt  ut aut reiciendise voluptat maiores alias consequaturs aut perferendis doloribus omnis saperet docendi nec, eos ea alii molestiae aliquand.
+								</p>
+							</div>
+							<div class="author-desc">
+								<img src="/images/author.jpg" alt="about author">
+							</div>
+						</div>
+						
+					</div><!-- end col -->
+				</div><!-- end row -->
+				<div class="row mt-5"> 
+					<table class="table">
+						<thead>
+						  <tr>
+							<th scope="col">#ID</th>
+							<th scope="col">EMAİL</th>
+							<th scope="col">ROLE</th>
+							<th scope="col">DELETE</th>
+						  </tr>
+						</thead>
+						<tbody>
+						<% for(let i =0; i<users.length; i++) { %>
+						  <tr>
+							<th scope="row"><%= users[i]._id %></th>
+							<td><%= users[i].email %></td>
+							<td><%= users[i].role %></td>
+							<td><a href="/users/<%= users[i]._id %>?_method=DELETE"
+								onclick="return confirm('ARE YOU SURE?')"
+								class="btn btn-danger rounded-o text-white"><span>DELETE</span></a></td>
+						  </tr>
+						<% } %>   						  
+						</tbody>
+					  </table>
 
-<% } %> 
+							
+				</div><!-- end row -->
+			</div><!-- end container -->
+		</div><!-- end section -->
+	<% } %>
+
+<% } %>
+
 	<%- include('partials/_footer')  %> 
 </body>
 </html>
