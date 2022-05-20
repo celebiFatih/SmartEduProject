@@ -29,13 +29,11 @@ exports.loginUser = (req, res) => {
         // kullanıcı varsa şifre kontrolu yap
         bcrypt.compare(password, user.password, (err, same) => {
           // body'den gelen passw ile vt'da ki passw compare et
-          if (same) {
-            // aynıysa
-            // User Session
-            req.session.userID = user._id; // hangi kullnıcı giriş yaptıgını belirlemek için her kullanıcıya ozel olan id bilgisini kullanarak session da bir userID olusturyoruz
 
-            res.status(200).redirect('/users/dashboard');
-          }
+          // User Session
+          req.session.userID = user._id; // hangi kullnıcı giriş yaptıgını belirlemek için her kullanıcıya ozel olan id bilgisini kullanarak session da bir userID olusturyoruz
+
+          res.status(200).redirect('/users/dashboard');
         }); // body'den gelen passw ile vt'nıdaki user.passw karşılaştır
       }
     });
@@ -55,11 +53,12 @@ exports.logoutUser = (req, res) => {
   });
 };
 
-// Dashboard template'tini render et
+// Dashboard template'ini render et
 exports.getDashboardPage = async (req, res) => {
-  const user = await User.findOne({ _id: req.session.userID }); // giriş yapan kullanıcıyı yakalasın
+  const user = await User.findOne({ _id: req.session.userID }).populate(
+    'courses'
+  ); // giriş yapan kullanıcıyı yakalasın // user üzerinden içinde referansı olan courses modelinden kursa erişebilmek için populate
   const categories = await Category.find(); // tum kategorileri alıp dashboard'a gonderiyoruz
-
   // dashboard'a kullanıcı tarafından olusturulan  kursları gonderiyoruz
   const courses = await Course.find({ user: req.session.userID }); // kursların içindeki user id ile sessiondaki userid'si ortusenler. yani o an giriş yapmıs olan kullanıclar tarafıondan olusturulan kurslar /rolu öğretmen olan kullnılar
 

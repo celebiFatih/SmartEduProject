@@ -21,11 +21,16 @@ const UserSchema = new Schema({
     type: String,
     enum: ["student", "teacher", "admin"], // string veritipinin alacağı değerleri tanımladık. kullanıcı öğrenci, öğretmen ya da admin olabilir
     default: "student" // varsayılan oalrak öğrenci olacak
-  }
+  },
+  courses: [{ // kullanıcının almıs oldugu kurslar için Course modeli ile ilişki
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course'
+  }]
 });
 
-// Kullanıcıdan alınan şifreyi vt' ye kaydedilmedin(belge olusturulmadan) once hash olarak kaydediyoruz
+// Kullanıcıdan alınan şifreyi vt' ye kaydedilmeden(belge olusturulmadan) once hash olarak kaydediyoruz
 UserSchema.pre('save', function (next) {
+  if(!this.isModified('password')) return next();
   const user = this; // this hangi kullanıcı giriş işlemi yapıyorsa o kullnıcı
   bcrypt.hash(user.password, 10, (error, hash) => { // 10 şifrelemenin duzeyini temsil ediyor
     user.password = hash;
@@ -34,6 +39,6 @@ UserSchema.pre('save', function (next) {
 });
 
 // şablonu modele donusturme
-const User = mongoose.mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 module.exports = User;
