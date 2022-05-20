@@ -15,6 +15,7 @@ router.route('/').get(courseController.getAllCourses);
 // tekil kurs yonlendirmesi
 router.route('/:slug').get(courseController.getCourse);
 router.route('/:slug').delete(courseController.deleteCourse);
+router.route('/:slug').put(courseController.updateCourse);
 
 // user'a eklenecek kursu yonlendirme
 router.route('/enroll').post(courseController.enrollCourse);
