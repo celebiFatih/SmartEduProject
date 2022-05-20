@@ -59,14 +59,16 @@ exports.getAllCourses = async (req, res) => {
 // Tekil Kursu Getirme
 exports.getCourse = async (req, res) => {
   try {
+    const user = await User.findById(req.session.userID); // giriş yapan kullanıcıyı yakalıyoruz
     const course = await Course.findOne({ slug: req.params.slug }).populate('user'); //slug'ına göre bul // user'ı populate ederek kursun user ilişkisinden faydalanarak single course sayfasında user bilgisine erişebiliriz
     //bir modelden referans olan diğer modele populate ederek erişebiliyoruz
     
     // cevap
     res.status(200).render('course', {
       // course template' i içinde render et
-      course,
+      course, // kurs bilgilerini gonderdik
       page_name: 'courses',
+      user // kullanıcı bilgilerini gonderdik
     });
   } catch (error) {
     res.status(400).json({
@@ -82,6 +84,22 @@ exports.enrollCourse = async (req, res) => {
     const user = await User.findById(req.session.userID);// hangi kullanıcı olduğu
     await user.courses.push({_id: req.body.course_id}); // id'si body'den gelen(formdan) kurs id ile eşit olan kursu kullanıcıya ekle
     await user.save(); // buralarda await i kullanmamızın sebebi işlemlerin sıralı olasını sağlamak. önce ilgili user'ı bulsun ardından kurslar bolumuıne yeni kursu eklesin ve kaydetsin
+    // cevap
+    res.status(200).redirect('/users/dashboard');
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error,
+    });
+  }
+};
+
+// User'ın kurslar alanından kurs çıkarma
+exports.releaseCourse = async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userID);
+    await user.courses.pull({_id: req.body.course_id});
+    await user.save(); 
     // cevap
     res.status(200).redirect('/users/dashboard');
   } catch (error) {

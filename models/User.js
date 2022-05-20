@@ -30,7 +30,7 @@ const UserSchema = new Schema({
 
 // Kullanıcıdan alınan şifreyi vt' ye kaydedilmeden(belge olusturulmadan) once hash olarak kaydediyoruz
 UserSchema.pre('save', function (next) {
-  if(!this.isModified('password')) return next();
+  if(!this.isModified('password')) return next(); // öğrencinin kursa enroll ettiği sayfadan bir tetikleme geldiği zaman yeniden parola olusturmasın diye
   const user = this; // this hangi kullanıcı giriş işlemi yapıyorsa o kullnıcı
   bcrypt.hash(user.password, 10, (error, hash) => { // 10 şifrelemenin duzeyini temsil ediyor
     user.password = hash;
